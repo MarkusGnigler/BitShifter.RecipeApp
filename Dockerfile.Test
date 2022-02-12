@@ -1,0 +1,13 @@
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+WORKDIR /source
+
+COPY . ./
+
+# install the report generator tool
+RUN dotnet tool install dotnet-reportgenerator-globaltool --tool-path /tools
+
+CMD dotnet test --collect:"XPlat Code Coverage" && \
+    /tools/reportgenerator \
+        -reports:"/source/Tests/**/coverage.cobertura.xml" \
+        -targetdir:"coveragereport" \
+        -reporttypes:Html

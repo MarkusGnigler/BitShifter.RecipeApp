@@ -1,0 +1,23 @@
+// @use '~@angular/material' as mat;
+@import '~@angular/material/theming';
+
+html,
+body {
+	font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+// $typography: mat.define-typography-level(
+//   $font-family: Roboto,
+//   $font-weight: 400,
+//   $font-size: 1rem,
+//   $line-height: 1,
+//   $letter-spacing: normal,
+// );
+// @include angular-material-typography($typography);
+
+// $typography: mat-typography-config(
+//   $font-family: Roboto,
+//   $headline: mat-typography-level(24px, 48px, 400),
+//   $body-1: mat-typography-level(16px, 24px, 400)
+// );
+// @include angular-material-typography($typography);

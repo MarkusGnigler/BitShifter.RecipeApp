@@ -1,0 +1,30 @@
+<!-- prettier-ignore -->
+<mat-accordion>
+	<mat-expansion-panel
+		#panel
+		class="expansion-panel mat-elevation-z3"
+		*ngFor="let item of items; let i = index"
+	>
+		<!-- HEADER -->
+		<mat-expansion-panel-header class="expansion-panel">
+			<mat-panel-title fxLayout fxItemAlign (click)="panel.toggle()">
+				{{ item.title }}
+			</mat-panel-title>
+
+			<mat-panel-description>
+				<ng-container
+					[ngTemplateOutlet]="actionTemplate"
+					[ngTemplateOutletContext]="{ $implicit: item }"
+				></ng-container>
+			</mat-panel-description>
+		</mat-expansion-panel-header>
+
+		<!-- ITEM -->
+		<ng-template #defaultItem>{{ item | json }}</ng-template>
+
+		<ng-container
+			[ngTemplateOutlet]="itemTemplateRef || defaultItem"
+			[ngTemplateOutletContext]="{ $implicit: item, index: i }"
+		></ng-container>
+	</mat-expansion-panel>
+</mat-accordion>

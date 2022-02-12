@@ -1,0 +1,21 @@
+//
+.fx {
+	display: flex;
+}
+
+.fx-row {
+    flex-direction: row;
+}
+
+.fx-col {
+    flex-direction: column;
+}
+
+.fx-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.fx-spacer {
+	flex: 1 1 auto;
+}

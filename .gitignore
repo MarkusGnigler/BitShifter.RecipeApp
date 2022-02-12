@@ -1,0 +1,20 @@
+**/*.suo
+**/obj/
+**/bin/
+**/*.user
+**/*.vs/
+
+**/.env
+
+**/appsettings.Local.json
+**/temp_Migrations/
+
+**/wwwroot
+
+# Webserver/nginx
+/logs
+*.log
+
+TestResults/
+coveragereport/
+storage/

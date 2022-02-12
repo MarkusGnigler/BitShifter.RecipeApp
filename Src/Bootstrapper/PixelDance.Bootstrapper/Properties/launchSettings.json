@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "PixelDance.Bootstrapper": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Dev"
+      },
+      "dotnetRunMessages": "true"
+    }
+  }
+}

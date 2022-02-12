@@ -1,0 +1,9 @@
+
+.login-card {
+  .mat-card-header-text {
+    color: map-get($primary, 500);
+    margin-top: 12px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}

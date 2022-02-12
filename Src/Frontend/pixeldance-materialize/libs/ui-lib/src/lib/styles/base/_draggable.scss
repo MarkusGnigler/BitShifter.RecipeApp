@@ -1,0 +1,10 @@
+//
+// Draggable mouse pointer
+*[cdkdrag],
+*[cdkDropList] > .dragger {
+	cursor: grab;
+	cursor: -webkit-grab;
+}
+.cdk-drag-dragging {
+    // background-color: #000;
+}

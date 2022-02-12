@@ -1,0 +1,39 @@
+//
+
+$panelHeight: 70px;
+$panelRadius: 20px;
+
+.mat-expansion-panel:not(.mat-expanded) {
+	margin-bottom: 16px;
+}
+.mat-expansion-panel {
+	margin-bottom: 40px;
+
+	.mat-expansion-panel-header {
+		height: 70px;
+	}
+	.mat-expansion-panel-header-title {
+		align-items: center;
+		flex-grow: 0 !important; //Checkbox Ripple Effekt hat nicht die volle höhe
+	}
+	.mat-expansion-panel-header-description {
+		flex-basis: 0;
+	}
+	.mat-expansion-panel-header-description {
+		align-items: center;
+		justify-content: space-between;
+	}
+	.mat-content {
+		height: 100%;
+	}
+
+}
+
+.mat-expansion-panel:first-of-type {
+	border-top-right-radius: $panelRadius !important;
+	border-top-left-radius: $panelRadius !important;
+}
+.mat-expansion-panel:last-of-type {
+	border-bottom-right-radius: $panelRadius !important;
+	border-bottom-left-radius: $panelRadius !important;
+}

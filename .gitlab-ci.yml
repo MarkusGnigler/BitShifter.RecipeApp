@@ -1,0 +1,136 @@
+include:
+  - project: pxd-intern/pixeldance.gitlab
+    ref: master
+    file: ci_templates/deploy.yml
+  - project: pxd-intern/pixeldance.gitlab
+    ref: master
+    file: ci_templates/angular-project.yml
+
+  # - local: .gitlab-ci/frontend.yml
+  #   rules:
+  #     - if: $CI_COMMIT_TAG == "frontend"
+  # - local: .gitlab-ci/backend.yml
+  #   rules:
+  #     - if: $CI_COMMIT_TAG == "backend"
+
+image: docker:stable
+
+variables:
+  DEFAULT_BRANCH: master
+  PROJECT_NAME: recipe-app
+
+cache:
+  key: '$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG'
+  paths:
+    - node_modules/
+
+stages:
+  - build
+  - lint-test
+  - deploy
+
+  # ####################################################################################
+  # TEMPLATES
+  # ####################################################################################
+
+# Deploy template
+.deploy-docker-template:
+  extends: .ssh-template
+  variables:
+    NAME: ''
+    ARCHIVE_PATH: ''
+    PUBLISH_NAME: $CI_COMMIT_BRANCH-$NAME-$CI_COMMIT_SHORT_SHA
+    DEPLOY_PATH: ''
+    SSH_USER: pi
+    SERVER_ADDRESS: 192.168.0.129
+  script:
+    - "[[ -f './tools/scripts/web.config' ]] && cat './tools/scripts/web.config' > ./$ARCHIVE_PATH/web.config"
+    - touch $ARCHIVE_PATH/BRANCH-$CI_COMMIT_BRANCH
+    - touch $ARCHIVE_PATH/COMMIT-$CI_COMMIT_SHORT_SHA
+    - tar -cvf ./$PUBLISH_NAME.zip -C $ARCHIVE_PATH .
+    - scp ./$PUBLISH_NAME.zip $SSH_USER@$SERVER_ADDRESS/:$DEPLOY_PATH
+    # - ssh "(tar -xvf "%destination_name%.zip" -C %full_app_path%)"
+    # - ssh "(tar -xvf $PUBLISH_NAME.zip)"
+    # - ssh $SSH_USER@$SERVER_ADDRESS "echo 'Welcome!!!' > welcome.txt"
+    - ssh $SSH_USER@$SERVER_ADDRESS "ls -la"
+  artifacts:
+    paths:
+      - $PUBLISH_NAME.zip
+    expire_in: 1 week
+
+  # ####################################################################################
+  # FRONTEND
+  # ####################################################################################
+
+test:
+  image: docker:stable
+  stage: build
+  script:
+    - ls -la
+    - ping -c 4 registry.pixeldance.at:5000
+    - docker --version
+    # - echo $CI_JOB_TOKEN | docker login registry.pixeldance.at -u PixelDance --password-stdin
+    - docker build -t registry.pixeldance.at:5000/pxd-software/pixeldance.recipeapp/recipeapp .
+    - docker push registry.pixeldance.at:5000/pxd-software/pixeldance.recipeapp/recipeapp
+
+  # ####################################################################################
+  # BACKEND
+  # ####################################################################################
+
+# Stage: Build with ENV's
+#########################
+# # Build template
+# .build-template:
+#   extends: .ng-build-template
+#   stage: build
+#   variables:
+#     APP_NAME: $PROJECT_NAME
+#   tags:
+#     - angular
+    
+# # Build develop
+# build-develop:
+#   extends: .build-template
+#   variables:
+#     BRANCH: develop
+#     ENVIRONMENT: develop
+# # Build test
+# build-test:
+#   extends: .build-template
+#   variables:
+#     BRANCH: testing
+#     ENVIRONMENT: test
+# # Build production
+# build-prod:
+#   extends: .build-template
+#   variables:
+#     BRANCH: main
+#     # BRANCH: $DEFAULT_BRANCH
+#     ENVIRONMENT: prod
+
+# Stage: Lint
+#############
+# linting:
+#   stage: lint-test
+#   before_script:
+#     - npm install -g @angular/cli
+#     - npm install @nrwl/linter
+#   script:
+#     - ng lint recipe-app
+#     - ng lint ui-lib
+#     - ng lint core-lib
+#     - ng lint recipe-lib
+#     # - ng lint identity-lib
+
+# Stage: Deploy
+###############
+upload-zip:
+  extends: .deploy-template
+  stage: deploy
+  only:
+    - blockiong-name
+  variables:
+    NAME: $PROJECT_NAME
+    ARCHIVE_PATH: dist/$PROJECT_NAME
+    PUBLISH_NAME: $CI_COMMIT_BRANCH-$PROJECT_NAME-$CI_COMMIT_SHORT_SHA
+    DEPLOY_PATH: '/home/pi/docker/recipe-app/Src/Frontend'

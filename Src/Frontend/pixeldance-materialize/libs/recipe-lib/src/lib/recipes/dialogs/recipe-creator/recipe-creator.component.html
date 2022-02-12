@@ -1,0 +1,20 @@
+<mat-card>
+	<mat-card-content>
+		<form id="recipeCreatorForm" (ngSubmit)="onSubmit()">
+			<pxd-recipe-form
+				[group]="formGroup"
+				[recipe]="resolvedRecipe"
+				[availableCategories]="categories$ | async"
+			></pxd-recipe-form>
+		</form>
+	</mat-card-content>
+
+	<mat-card-actions>
+		<button mat-button color="primary" form="recipeCreatorForm" [disabled]="formGroup.invalid">
+			<mat-icon>save</mat-icon>
+		</button>
+		<button mat-button color="warn" routerLink="/rezepte">
+			<mat-icon>cancel</mat-icon>
+		</button>
+	</mat-card-actions>
+</mat-card>

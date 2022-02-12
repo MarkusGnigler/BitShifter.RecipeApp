@@ -1,0 +1,18 @@
+<img *ngIf="value?.name" [src]="value.name" alt="" class="full-width" />
+<mat-form-field appearance="fill" class="full-width">
+	<mat-label>{{ label }}:</mat-label>
+	<mat-icon matPrefix>attach_file</mat-icon>
+	<input
+		matInput
+		name="file"
+		accept="image/*"
+		placeholder="{{ label }} ..."
+		[name]="fieldName"
+		[id]="fieldName!"
+		[value]="value?.name ?? ''"
+		[disabled]="isDisabled"
+		(blur)="touched()"
+		(click)="fileInput.click()"
+	/>
+</mat-form-field>
+<input type="file" #fileInput accept="image/*" (change)="onFileSelected($event)" style="display: none" />

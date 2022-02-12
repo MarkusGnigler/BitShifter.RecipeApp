@@ -1,0 +1,68 @@
+<ng-container *ngIf="group" [formGroup]="group">
+	<mat-form-field appearance="fill">
+		<mat-label>Url:</mat-label>
+		<input matInput required [formControlName]="FORMGROUP_NAMES.slug" autocomplete="off" />
+
+		<mat-error *ngIf="getControlByName(FORMGROUP_NAMES.slug)?.invalid">
+			{{ getErrorMessage(getControlByName(FORMGROUP_NAMES.slug)) }}
+		</mat-error>
+	</mat-form-field>
+
+	<mat-form-field appearance="fill">
+		<mat-label>Titel:</mat-label>
+		<input matInput required [formControlName]="FORMGROUP_NAMES.title" autocomplete="off" />
+
+		<mat-error *ngIf="getControlByName(FORMGROUP_NAMES.title)?.invalid">
+			{{ getErrorMessage(getControlByName(FORMGROUP_NAMES.title)) }}
+		</mat-error>
+	</mat-form-field>
+
+	<mat-form-field appearance="fill">
+		<mat-label>Kategorie:</mat-label>
+		<mat-select [formControlName]="FORMGROUP_NAMES.category" required>
+			<mat-option *ngFor="let category of availableCategories" [value]="category.id">
+				{{ category.name }}
+			</mat-option>
+		</mat-select>
+
+		<mat-error *ngIf="getControlByName(FORMGROUP_NAMES.category)?.invalid">
+			{{ getErrorMessage(getControlByName(FORMGROUP_NAMES.category)) }}
+		</mat-error>
+	</mat-form-field>
+
+	<!-- TABS -->
+	<mat-tab-group mat-stretch-tabs color="accent">
+		<mat-tab label="Zutaten">
+			<pxd-ingredient-selector [group]="group" [formArrayName]="FORMGROUP_NAMES.ingredients"></pxd-ingredient-selector>
+		</mat-tab>
+
+		<mat-tab label="Zubereitung">
+			<mat-error class="editor-error" *ngIf="getControlByName(FORMGROUP_NAMES.preparation)?.invalid">
+				{{ getErrorMessage(getControlByName(FORMGROUP_NAMES.preparation)) }}
+			</mat-error>
+
+			<ui-html-editor [formControlName]="FORMGROUP_NAMES.preparation"></ui-html-editor>
+		</mat-tab>
+
+		<mat-tab label="Beschreibung">
+			<mat-error class="editor-error" *ngIf="getControlByName(FORMGROUP_NAMES.description)?.invalid">
+				{{ getErrorMessage(getControlByName(FORMGROUP_NAMES.description)) }}
+			</mat-error>
+
+			<ui-html-editor [formControlName]="FORMGROUP_NAMES.description"></ui-html-editor>
+		</mat-tab>
+
+		<mat-tab label="Fotos">
+			<ui-image-uploader
+				[parentForm]="group!"
+				label="Foto"
+				fieldName="img"
+				[formControlName]="FORMGROUP_NAMES.img"
+			></ui-image-uploader>
+
+			<mat-error class="editor-error" *ngIf="getControlByName(FORMGROUP_NAMES.img)?.invalid">
+				{{ getErrorMessage(getControlByName(FORMGROUP_NAMES.img)) }}
+			</mat-error>
+		</mat-tab>
+	</mat-tab-group>
+</ng-container>

@@ -1,0 +1,74 @@
+version: '3'
+
+networks:
+  pxd-work:
+
+volumes:
+  data:
+
+services:
+
+  frontend:
+    image: nginx:latest
+    restart: always
+    container_name: recipe-frontend
+    depends_on:
+      - backend
+    ports:
+      - 5002:80
+      # - 5003:443
+    environment:
+      #- NGINX_HOST=foobar.com
+      - NGINX_PORT=80,443
+    volumes:
+      - ./Src/Frontend:/var/www
+      - ./Src/Webserver/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./Src/Webserver/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./Src/Webserver/nginx/logs:/var/log/nginx
+      # - /etc/letsencrypt:/etc/letsencrypt
+
+  backend:
+    image: registry.pixeldance.at/pxd-software/pixeldance.recipeapp/recipeapp
+    # command: tail -F anything # holds the container
+    restart: always
+    container_name: recipe-backend
+    depends_on:
+      - database
+    ports:
+      - 6060:80
+      - 6067:433
+    networks: 
+      - pxd-work
+    volumes:
+      - /media/storage/recipe-app/logs:/app/logs
+      - /media/storage/recipe-app/images:/app/wwwroot/images
+      - /etc/letsencrypt:/etc/letsencrypt
+    env_file:
+      - app.env
+
+  database:
+    image: postgres:latest
+    restart: always
+    container_name: recipe-postgres
+    networks: 
+      - pxd-work
+    volumes:
+      - data:/var/lib/postgresql/data
+    env_file:
+      - db.env
+
+  pgadmin:
+    # image: dpage/pgadmin4
+    image: biarms/pgadmin4
+    restart: on-failure
+    container_name: recipe-pg-admin
+    ports:
+      - 5005:5050
+    networks: 
+      - pxd-work
+    depends_on:
+      - database
+    volumes:
+       - data:/var/lib/pgadmin
+    env_file:
+      - db.env

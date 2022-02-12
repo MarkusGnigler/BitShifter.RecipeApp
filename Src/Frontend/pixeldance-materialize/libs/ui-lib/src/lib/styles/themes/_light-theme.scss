@@ -1,0 +1,21 @@
+//
+// Define a light theme
+$primary: $light-primary !global;
+$light-theme-primary: mat-palette($primary);
+$light-theme-accent: mat-palette($secondary, A200, A100, A400);
+
+$light-theme: mat-light-theme($light-theme-primary, $light-theme-accent);
+
+a,
+.mat-toolbar {
+	color: #fff !important;
+}
+
+//Light backrgound
+.light-theme > * {
+	// background: white;
+	a,
+	.mat-toolbar {
+		color: #000 !important;
+	}
+}

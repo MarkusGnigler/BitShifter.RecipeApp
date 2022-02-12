@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+
+  frontend:
+    volumes:
+      - ./Src/Frontend/pixeldance-materialize/dist/apps/recipe-app:/var/www
+      - ./Src/Webserver/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./Src/Webserver/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./Src/Webserver/nginx/logs:/var/log/nginx
+
+  backend:
+    build:
+      context: .
+      dockerfile: .
+    volumes:
+      - ./storage/logs:/app/logs
+      - ./storage/images:/app/wwwroot/images

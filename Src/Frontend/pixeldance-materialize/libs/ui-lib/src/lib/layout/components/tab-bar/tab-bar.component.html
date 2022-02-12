@@ -1,0 +1,20 @@
+<div class="tapbar-container">
+	<nav mat-tab-nav-bar class="mat-elevation-z1">
+		<a
+			mat-tab-link
+			*ngFor="let nav of navItems"
+			[disabled]="nav.disabled"
+			#rla="routerLinkActive"
+			[active]="rla.isActive"
+			[routerLink]="nav.route"
+			routerLinkActive="activeLink"
+		>
+			<mat-icon *ngIf="nav.icon">{{ nav.icon }}</mat-icon>
+			<span>{{ nav.name }}</span>
+		</a>
+	</nav>
+
+	<section class="tabbar-content">
+		<ng-content></ng-content>
+	</section>
+</div>

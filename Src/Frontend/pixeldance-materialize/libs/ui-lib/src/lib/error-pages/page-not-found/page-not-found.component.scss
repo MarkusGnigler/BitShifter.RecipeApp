@@ -1,0 +1,16 @@
+.full-w {
+    width: 100%;
+}
+.full-h {
+    height: 100%;
+}
+
+.fx {
+    display: flex;
+    flex-direction: column;
+}
+.fx-center {
+    align-items: center;
+    justify-content: center;
+}
+
