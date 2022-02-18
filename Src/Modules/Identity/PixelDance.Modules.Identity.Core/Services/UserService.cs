@@ -40,8 +40,9 @@ namespace PixelDance.Modules.Identity.Core.Services
                 .FirstOrDefaultAsync();
 
             var result = user is not null
-                ? Result<AppUser, string[]>.Succeeded(user)
-                : Result<AppUser, string[]>.Failed(new[] { $"Kein Benutzer mit der ID \"{id}\" gefunden." });
+                ? user.Succeeded<AppUser, string[]>()
+                : new[] { $"Kein Benutzer mit der ID \"{id}\" gefunden." }
+                    .Failed<AppUser, string[]>();
 
             return result
                 .Map(user => _mapper.Map<AppUserVm>(user))
@@ -58,8 +59,9 @@ namespace PixelDance.Modules.Identity.Core.Services
                 .ToListAsync();
 
             var result = users is not null
-                ? Result<IEnumerable<AppUser>, string[]>.Succeeded(users)
-                : Result<IEnumerable<AppUser>, string[]>.Failed(new[] { $"Keine Benutzer gefunden." });
+                ? users.Succeeded<IEnumerable<AppUser>, string[]>()
+                : new[] { $"Keine Benutzer gefunden." }
+                    .Failed<IEnumerable<AppUser>, string[]>();
 
             return result
                 .Map(users => users.Select(x => _mapper.Map<AppUserVm>(x)))
@@ -136,16 +138,16 @@ namespace PixelDance.Modules.Identity.Core.Services
                 .FirstOrDefaultAsync();
 
             return user is not null
-                ? Result<AppUser, string[]>.Succeeded(user)
-                : Result<AppUser, string[]>.Failed(
-                    new[] { $"Kein Benutzer mit der ID \"{id}\" gefunden." });
+                ? user.Succeeded<AppUser, string[]>()
+                : new[] { $"Kein Benutzer mit der ID \"{id}\" gefunden." }
+                    .Failed<AppUser, string[]>();
         }
 
         private Result<AppUser, string[]> ParseIdentity(AppUser user, IdentityResult result)
             => result.Succeeded
-                ? Result<AppUser, string[]>.Succeeded(user)
-                : Result<AppUser, string[]>.Failed(
-                    result.Errors.Select(x => x.Description).ToArray());
+                ? user.Succeeded<AppUser, string[]>()
+                : result.Errors.Select(x => x.Description).ToArray()
+                    .Failed<AppUser, string[]>();
 
         #endregion
 

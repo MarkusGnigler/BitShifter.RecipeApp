@@ -23,7 +23,7 @@ namespace PixelDance.Modules.Identity.Api.Endpoints
             var userRegisterPipeline = await _identityService.Register(registerVm);
 
             var userResult = userRegisterPipeline
-                .Merge(
+                .Match(
                     s => Ok(s), 
                     f => (ActionResult)BadRequest(string.Join("\n", f)));
             
@@ -36,7 +36,7 @@ namespace PixelDance.Modules.Identity.Api.Endpoints
             var userRegisterPipeline = await _identityService.Login(loginVm);
 
             var userResult = userRegisterPipeline
-                .Merge(
+                .Match(
                     s => Ok(s),
                     f => (ActionResult)BadRequest(string.Join("\n", f)));
 

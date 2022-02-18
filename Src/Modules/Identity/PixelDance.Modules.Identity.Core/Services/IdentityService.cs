@@ -55,9 +55,9 @@ namespace PixelDance.Modules.Identity.Core.Services
                     x.UserName == username);
 
             return assignedUser is null 
-                ? Result<AppUser, Exception>.Succeeded(assignedUser!)
-                : Result<AppUser, Exception>.Failed(
-                    new Exception("Der Benutzername ist bereits vergeben, bitte versuchen sie einen anderen."));
+                ? assignedUser.Succeeded<AppUser, Exception>()
+                : new Exception("Der Benutzername ist bereits vergeben, bitte versuchen sie einen anderen.")
+                    .Failed<AppUser, Exception>();
         }
 
         private async Task<Result<AppUser, string[]>> CreateUser(AppUser user, string password)
@@ -65,9 +65,9 @@ namespace PixelDance.Modules.Identity.Core.Services
             var result = await _userManager.CreateAsync(user, password);
 
             return result.Succeeded
-                ? Result<AppUser, string[]>.Succeeded(user)
-                : Result<AppUser, string[]>.Failed(
-                    result.Errors.Select(x => x.Description).ToArray());
+                ? user.Succeeded<AppUser, string[]>()
+                : result.Errors.Select(x => x.Description).ToArray()
+                    .Failed<AppUser, string[]>();
         }
 
         private async Task<Result<AppUser, string[]>> AddUserRole(AppUser user)
@@ -75,9 +75,9 @@ namespace PixelDance.Modules.Identity.Core.Services
             var roleResult = await _userManager.AddToRoleAsync(user, RoleType.User.ToString());
 
             return roleResult.Succeeded
-                ? Result<AppUser, string[]>.Succeeded(user)
-                : Result<AppUser, string[]>.Failed(
-                    roleResult.Errors.Select(x => x.Description).ToArray());
+                ? user.Succeeded<AppUser, string[]>()
+                : roleResult.Errors.Select(x => x.Description).ToArray()
+                    .Failed<AppUser, string[]>();
         }
 
         #endregion
@@ -102,8 +102,9 @@ namespace PixelDance.Modules.Identity.Core.Services
                 .SingleOrDefaultAsync(x => x.UserName == username);
 
             return user is not null
-                ? Result<AppUser, string[]>.Succeeded(user)
-                : Result<AppUser, string[]>.Failed(new[] { $"Kein Benutzer mit dem Namen \"{username}\" gefunden." });
+                ? user.Succeeded<AppUser, string[]>()
+                : new[] { $"Kein Benutzer mit dem Namen \"{username}\" gefunden." }
+                    .Failed<AppUser, string[]>();
         }
 
         private async Task<Result<AppUser, string[]>> SignIn(AppUser user, AppUserVm loginVm)
@@ -112,8 +113,9 @@ namespace PixelDance.Modules.Identity.Core.Services
                 .CheckPasswordSignInAsync(user, loginVm.Password, lockoutOnFailure: false);
 
             return result.Succeeded
-                ? Result<AppUser, string[]>.Succeeded(user)
-                : Result<AppUser, string[]>.Failed(new[] { result.IsNotAllowed ? "Zugriff nicht erlaubt" : "Passwort falsch" });
+                ? user.Succeeded<AppUser, string[]>()
+                : new[] { result.IsNotAllowed ? "Zugriff nicht erlaubt" : "Passwort falsch" }
+                    .Failed<AppUser, string[]>();
         }
 
         #endregion

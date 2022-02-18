@@ -24,7 +24,7 @@ namespace PixelDance.Modules.Identity.Api.Endpoints
         {
             var userPipeline = await _userService.GetAll();
 
-            return userPipeline.Merge(
+            return userPipeline.Match(
                 s => Ok(s),
                 f => (ActionResult)BadRequest(string.Join("\n", f)));
         }
@@ -34,7 +34,7 @@ namespace PixelDance.Modules.Identity.Api.Endpoints
         {
             var userPipeline = await _userService.GetById(id);
 
-            return userPipeline.Merge(
+            return userPipeline.Match(
                 s => Ok(s),
                 f => (ActionResult)BadRequest(string.Join("\n", f)));
         }
@@ -47,7 +47,7 @@ namespace PixelDance.Modules.Identity.Api.Endpoints
 
             var userPipeline = await _userService.UpdateRoles(updateUserVm);
 
-            return userPipeline.Merge(
+            return userPipeline.Match(
                 s => Ok(s),
                 f => (ActionResult)BadRequest(string.Join("\n", f)));
         }
@@ -58,7 +58,7 @@ namespace PixelDance.Modules.Identity.Api.Endpoints
         {
             var userPipeline = await _userService.Delete(id);
 
-            return userPipeline.Merge(
+            return userPipeline.Match(
                 s => Ok(s),
                 f => (ActionResult)BadRequest(string.Join("\n", f)));
         }

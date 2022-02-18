@@ -42,11 +42,11 @@ namespace PixelDance.Modules.Identity.Domain.AppUsers
         {
             try
             {
-                return Result<AppUser, Exception>.Succeeded(new(username, password));
+                return new AppUser(username, password).Succeeded<AppUser, Exception>();
             }
             catch (Exception ex)
             {
-                return Result<AppUser, Exception>.Failed(ex);
+                return ex.Failed<AppUser, Exception>();
             }
         }
     }

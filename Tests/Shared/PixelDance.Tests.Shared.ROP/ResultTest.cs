@@ -4,23 +4,23 @@ using Xunit;
 using FluentAssertions;
 
 using PixelDance.Shared.ROP;
+using PixelDance.Tests.Shared.ROP.Fixtures;
 
 namespace PixelDance.Tests.Shared.ROP
 {
     public class ResultTest
     {
-        record User(string Name);
 
         #region [ Creation ]
+
         [Fact]
         public void Create_Success_Result()
         {
             //Arrange
-            var EXPECTED = typeof(Result<User, string[]>.Success);
+            var EXPECTED = typeof(Result<User, Exception>.Success);
 
-            Result<User, string[]> result
-                = Result<User, string[]>
-                    .Succeeded(new(string.Empty));
+            Result<User, Exception> result
+                = ResultBuilder.GetSuccess();
 
             //Act
 
@@ -36,8 +36,7 @@ namespace PixelDance.Tests.Shared.ROP
             string EXPECTED = "Value cannot be null. (Parameter 'success')";
 
             Func<Result<User, string[]>> createResultAction =
-                () => Result<User, string[]>
-                    .Succeeded(null!);
+                () => ((User)null).Succeeded<User, string[]>();
 
             //Act
 
@@ -55,8 +54,7 @@ namespace PixelDance.Tests.Shared.ROP
             var EXPECTED = typeof(Result<User, string[]>.Failure);
 
             Result<User, string[]> result
-                = Result<User, string[]>
-                    .Failed(new[] { string.Empty });
+                = new[] { string.Empty }.Failed<User, string[]>();
 
             //Act
 
@@ -71,11 +69,8 @@ namespace PixelDance.Tests.Shared.ROP
             //Arrange
             string EXPECTED = "Value cannot be null. (Parameter 'failure')";
 
-#pragma warning disable CS8625
             Func<Result<User, string[]>> createResultAction =
-                () => Result<User, string[]>
-                    .Failed(null);
-#pragma warning restore CS8625
+                () => (null as string[]).Failed<User, string[]>();
 
             //Act
 
@@ -85,9 +80,11 @@ namespace PixelDance.Tests.Shared.ROP
                 .Throw<ArgumentNullException>()
                 .WithMessage(EXPECTED);
         }
+
         #endregion
 
         #region [ Casting / As operator ]
+
         [Fact]
         public void Cast_Success_Result_ToRight_Type()
         {
@@ -95,14 +92,14 @@ namespace PixelDance.Tests.Shared.ROP
             var EXPECTED = typeof(Result<User, string[]>.Success);
 
             Result<User, string[]> result
-                = Result<User, string[]>
-                    .Succeeded(new(string.Empty));
+                = new User(string.Empty).Succeeded<User, string[]>();
 
             //Act
-            var value = result.AsSuccess;
 
             //Assert
-            value.Should()
+            //result.AsSuccees()
+            result
+                .Should()
                 .BeOfType(EXPECTED);
         }
 
@@ -113,90 +110,17 @@ namespace PixelDance.Tests.Shared.ROP
             var EXPECTED = typeof(Result<User, string[]>.Failure);
 
             Result<User, string[]> result
-                = Result<User, string[]>
-                    .Failed(new[] { string.Empty });
+                = new[] { string.Empty }.Failed<User, string[]>();
 
             //Act
-            var value = result.AsFailure;
 
             //Assert
-            value.Should()
+            //result.AsFailure()
+            result
+                .Should()
                 .BeOfType(EXPECTED);
         }
-        #endregion
 
-        #region [ Querying / Is operator ]
-        [Fact]
-        public void Test_If_Result_IsSuccess_Is_True()
-        {
-            //Arrange
-            var EXPECTED = true;
-
-            Result<User, string[]> result
-                = Result<User, string[]>
-                    .Succeeded(new(string.Empty));
-
-            //Act
-            var value = result.IsSuccess;
-
-            //Assert
-            value.Should()
-                .Be(EXPECTED);
-        }
-
-        [Fact]
-        public void Test_If_Result_IsSuccess_Is_False()
-        {
-            //Arrange
-            var EXPECTED = false;
-
-            Result<User, string[]> result
-                = Result<User, string[]>
-                    .Failed(new[] { string.Empty });
-
-            //Act
-            var value = result.IsSuccess;
-
-            //Assert
-            value.Should()
-                .Be(EXPECTED);
-        }
-
-        [Fact]
-        public void Test_If_Result_IsFailure_Is_True()
-        {
-            //Arrange
-            var EXPECTED = true;
-
-            Result<User, string[]> result
-                = Result<User, string[]>
-                    .Failed(new[] { string.Empty });
-
-            //Act
-            var value = result.IsFailure;
-
-            //Assert
-            value.Should()
-                .Be(EXPECTED);
-        }
-
-        [Fact]
-        public void Test_If_Result_IsFailure_Is_False()
-        {
-            //Arrange
-            var EXPECTED = false;
-
-            Result<User, string[]> result
-                = Result<User, string[]>
-                    .Succeeded(new(string.Empty));
-
-            //Act
-            var value = result.IsFailure;
-
-            //Assert
-            value.Should()
-                .Be(EXPECTED);
-        }
         #endregion
 
     }

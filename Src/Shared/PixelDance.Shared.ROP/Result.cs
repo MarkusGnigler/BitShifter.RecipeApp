@@ -1,51 +1,60 @@
-﻿#nullable enable
-#pragma warning disable CS8603 // Mögliche Nullverweisrückgabe.
-
-using System;
+﻿using System;
 
 namespace PixelDance.Shared.ROP
 {
-    public abstract record Result<TSuccess, TFailure>
+    public abstract class Result<TSuccess, TFailure>
     {
-        public bool IsSuccess => this is Success;
-        public bool IsFailure => this is Failure;
+        internal bool IsSuccess => this is Success;
+        internal bool IsFailure => this is Failure;
 
-        public Success AsSuccess => this as Success;
-        public Failure AsFailure => this as Failure;
+        internal Success AsSuccees()
+            => this as Success
+                ?? throw new NullReferenceException(nameof(Success));
+        internal Failure AsFailure()
+            => this as Failure
+                ?? throw new NullReferenceException(nameof(Failure));
 
         #region [ Success ]
 
-        public record Success(TSuccess Item) : Result<TSuccess, TFailure>
+        public class Success : Result<TSuccess, TFailure>
         {
-            public override string ToString() => $"SUCCESS: {Item?.ToString()}";
+            internal readonly TSuccess _item;
 
-            public static implicit operator TSuccess(Success success) => success.Item;
+            internal Success(TSuccess success)
+            {
+                _item = success
+                    ?? throw new ArgumentNullException(nameof(success));
+            }
+
+            public override string ToString() => $"SUCCESS: {_item}";
+
+            public static implicit operator TSuccess(Success success) => success._item;
         }
 
-        public static Result<TSuccess, TFailure> Succeeded(TSuccess success)
-        {
-            _ = success ?? throw new ArgumentNullException(nameof(success));
-
-            return new Success(success);
-        }
+        internal static Result<TSuccess, TFailure> Succeeded(TSuccess success)
+            => new Success(success);
 
         #endregion
 
         #region [ Failure ]
 
-        public record Failure(TFailure Item) : Result<TSuccess, TFailure>
+        public class Failure : Result<TSuccess, TFailure>
         {
-            public override string ToString() => $"FAILURE: {Item?.ToString()}";
+            internal readonly TFailure _item;
 
-            public static implicit operator TFailure(Failure failure) => failure.Item;
+            internal Failure(TFailure failure)
+            {
+                _item = failure
+                    ?? throw new ArgumentNullException(nameof(failure));
+            }
+
+            public override string ToString() => $"FAILURE: {_item}";
+
+            public static implicit operator TFailure(Failure failure) => failure._item;
         }
 
-        public static Result<TSuccess, TFailure> Failed(TFailure failure)
-        {
-            _ = failure ?? throw new ArgumentNullException(nameof(failure));
-
-            return new Failure(failure);
-        }
+        internal static Result<TSuccess, TFailure> Failed(TFailure failure)
+            => new Failure(failure);
 
         #endregion
 

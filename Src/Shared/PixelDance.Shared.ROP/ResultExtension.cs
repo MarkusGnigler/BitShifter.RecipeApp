@@ -4,7 +4,9 @@ namespace PixelDance.Shared.ROP
 {
     public static class ResultExtension
     {
+
         #region [ Bind ]
+
         /// <summary>
         /// Takes a Result Monad and creates a new Result Monad.
         /// </summary>
@@ -18,8 +20,9 @@ namespace PixelDance.Shared.ROP
             this Result<TSuccess, TFailure> input,
             Func<TSuccess, Result<TSuccessNew, TFailure>> switchFunction)
                 => input.IsSuccess
-                    ? switchFunction(input.AsSuccess)
-                    : Result<TSuccessNew, TFailure>.Failed(input.AsFailure);
+                    ? switchFunction(input.AsSuccees())
+                    : Result<TSuccessNew, TFailure>.Failed(input.AsFailure());
+
         #endregion
 
         #region [ Map ]
@@ -36,8 +39,8 @@ namespace PixelDance.Shared.ROP
             this Result<TSuccess, TFailure> input,
             Func<TSuccess, TSuccessNew> twoTrackInput)
                 => input.IsSuccess
-                    ? Result<TSuccessNew, TFailure>.Succeeded(twoTrackInput(input.AsSuccess))
-                    : Result<TSuccessNew, TFailure>.Failed(input.AsFailure);
+                    ? Result<TSuccessNew, TFailure>.Succeeded(twoTrackInput(input.AsSuccees()))
+                    : Result<TSuccessNew, TFailure>.Failed(input.AsFailure());
         /// <summary>
         /// Map the failure track to a new failure result or continues on the success track.
         /// </summary>
@@ -51,8 +54,8 @@ namespace PixelDance.Shared.ROP
             this Result<TSuccess, TFailure> input,
             Func<TFailure, TFailureNew> twoTrackInput)
                 => input.IsSuccess
-                    ? Result<TSuccess, TFailureNew>.Succeeded(input.AsSuccess)
-                    : Result<TSuccess, TFailureNew>.Failed(twoTrackInput(input.AsFailure));
+                    ? Result<TSuccess, TFailureNew>.Succeeded(input.AsSuccees())
+                    : Result<TSuccess, TFailureNew>.Failed(twoTrackInput(input.AsFailure()));
 
 
         #endregion
@@ -70,7 +73,7 @@ namespace PixelDance.Shared.ROP
             this Result<TSuccess, TFailure> input,
             Action<TSuccess> teeAction)
         {
-            if (input.IsSuccess) teeAction(input.AsSuccess);
+            if (input.IsSuccess) teeAction(input.AsSuccees());
 
             return input;
         }
@@ -86,28 +89,31 @@ namespace PixelDance.Shared.ROP
             this Result<TSuccess, TFailure> input,
             Action<TFailure> teeAction)
         {
-            if (input.IsFailure) teeAction(input.AsFailure);
+            if (input.IsFailure) teeAction(input.AsFailure());
 
             return input;
         }
         #endregion
 
         #region [ Either ]
+
         public static Result<TSuccess2, TFailure2> Either<TSuccess, TFailure, TSuccess2, TFailure2>(
             this Result<TSuccess, TFailure> input,
             Func<Result<TSuccess, TFailure>, Result<TSuccess2, TFailure2>> onSuccess,
-            Func<Result<TSuccess, TFailure>, Result<TSuccess2, TFailure2>> onFailure
-            )
+            Func<Result<TSuccess, TFailure>, Result<TSuccess2, TFailure2>> onFailure)
                 => input.IsSuccess ? onSuccess(input) : onFailure(input);
 
-        public static Result<TSuccess, TFailure[]> ToFailure<TSuccess, TFailure>(this Result<TSuccess, TFailure[]> input)
-            => input.Either(
-                    s => Result<TSuccess, TFailure[]>.Failed(Array.Empty<TFailure>()),
-                    f => f
-                );
+        public static Result<TSuccess, TFailure[]> ToFailure<TSuccess, TFailure>(
+            this Result<TSuccess, TFailure[]> input)
+                => input.Either(
+                        s => Result<TSuccess, TFailure[]>.Failed(Array.Empty<TFailure>()),
+                        f => f
+                    );
+
         #endregion
 
         #region [ Dead End ]
+
         /// <summary>
         /// Handles the result in the specific Action
         /// </summary>
@@ -122,13 +128,15 @@ namespace PixelDance.Shared.ROP
             Action<TFailure> onFailure)
         {
             if (result.IsSuccess)
-                onSuccess(result.AsSuccess);
+                onSuccess(result.AsSuccees());
             else
-                onFailure(result.AsFailure);
+                onFailure(result.AsFailure());
         }
+
         #endregion
 
-        #region [ Merge ]
+        #region [ Match ]
+
         /// <summary>
         /// Get a result from the specific track
         /// </summary>
@@ -139,19 +147,19 @@ namespace PixelDance.Shared.ROP
         /// <param name="successFunc"></param>
         /// <param name="failureFunc"></param>
         /// <returns>TOutput</returns>
-        public static TOutput Merge<TSuccess, TFailure, TOutput>(
+        public static TOutput Match<TSuccess, TFailure, TOutput>(
             this Result<TSuccess, TFailure> twoTrackInput,
-            Func<TSuccess, TOutput> successFunc,
-            Func<TFailure, TOutput> failureFunc)
+            Func<TSuccess, TOutput> onSuccess,
+            Func<TFailure, TOutput> onFailure)
                 => twoTrackInput.IsSuccess
-                    ? successFunc(twoTrackInput.AsSuccess)
-                    : failureFunc(twoTrackInput.AsFailure);
+                    ? onSuccess(twoTrackInput.AsSuccees())
+                    : onFailure(twoTrackInput.AsFailure());
 
-        public static Func<TInput, TOutput> Merge<TInput, TSuccess, TFailure, TOutput>(
+        public static Func<TInput, TOutput> Match<TInput, TSuccess, TFailure, TOutput>(
             this Func<TInput, Result<TSuccess, TFailure>> twoTrackInputFunction,
-            Func<TSuccess, TOutput> successFunc, 
-            Func<TFailure, TOutput> failureFunc)
-                => input => twoTrackInputFunction(input).Merge(successFunc, failureFunc);
+            Func<TSuccess, TOutput> onSuccess,
+            Func<TFailure, TOutput> onFailure)
+                => input => twoTrackInputFunction(input).Match(onSuccess, onFailure);
 
         #endregion
 
