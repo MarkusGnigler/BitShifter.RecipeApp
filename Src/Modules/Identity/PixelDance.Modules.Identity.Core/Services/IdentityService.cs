@@ -46,7 +46,7 @@ namespace PixelDance.Modules.Identity.Core.Services
                 .MapAsync(async user => user.AsUserVm(
                     await _tokenService.CreateToken(user)));
 
-        private async Task<Result<AppUser, Exception>> CheckIfUserExists(AppUserVm registerVm)
+        private async Task<Result<object, Exception>> CheckIfUserExists(AppUserVm registerVm)
         {
             string username = SanitizeUserName(registerVm.UserName);
 
@@ -55,9 +55,9 @@ namespace PixelDance.Modules.Identity.Core.Services
                     x.UserName == username);
 
             return assignedUser is null 
-                ? assignedUser.Succeeded<AppUser, Exception>()
+                ? new object().Succeeded<object, Exception>()
                 : new Exception("Der Benutzername ist bereits vergeben, bitte versuchen sie einen anderen.")
-                    .Failed<AppUser, Exception>();
+                    .Failed<object, Exception>();
         }
 
         private async Task<Result<AppUser, string[]>> CreateUser(AppUser user, string password)
