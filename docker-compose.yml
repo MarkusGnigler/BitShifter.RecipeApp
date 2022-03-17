@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  pxd-work:
+  bitshifternet:
 
 volumes:
   data:
@@ -28,8 +28,7 @@ services:
       # - /etc/letsencrypt:/etc/letsencrypt
 
   backend:
-    image: registry.pixeldance.at/pxd-software/pixeldance.recipeapp/recipeapp
-    # command: tail -F anything # holds the container
+    image: registry.bit-shifter.at/bs-projects/bitshifter.recipeapp
     restart: always
     container_name: recipe-backend
     depends_on:
@@ -38,7 +37,10 @@ services:
       - 6060:80
       - 6067:433
     networks: 
-      - pxd-work
+      - bitshifternet
+    # environment:
+    #   - ASPNETCORE_URLS=https://+:443;http://+:80
+    #   - ASPNETCORE_Kestrel__Certificates__Default__Path=/etc/letsencrypt/live/pixeldance.at/fullchain.pem
     volumes:
       - /media/storage/recipe-app/logs:/app/logs
       - /media/storage/recipe-app/images:/app/wwwroot/images
@@ -51,7 +53,7 @@ services:
     restart: always
     container_name: recipe-postgres
     networks: 
-      - pxd-work
+      - bitshifternet
     volumes:
       - data:/var/lib/postgresql/data
     env_file:
@@ -65,7 +67,7 @@ services:
     ports:
       - 5005:5050
     networks: 
-      - pxd-work
+      - bitshifternet
     depends_on:
       - database
     volumes:
