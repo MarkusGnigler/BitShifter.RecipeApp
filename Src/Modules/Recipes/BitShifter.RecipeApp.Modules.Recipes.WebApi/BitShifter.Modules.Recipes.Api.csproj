@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BitShifter.RecipeApp.Modules.Recipes.Application\BitShifter.Modules.Recipes.Application.csproj" />
+    <ProjectReference Include="..\BitShifter.RecipeApp.Modules.Recipes.Infrastructure\BitShifter.Modules.Recipes.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
