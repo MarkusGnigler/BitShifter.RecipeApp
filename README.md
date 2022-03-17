@@ -14,7 +14,7 @@ The project contains 2 modules.
    The most important module is the recipe module.
    It implements all operations with CQRS pattern but not down to the database (e.g. ReadSide=NoSql & WriteSide=Sql). Because it is not yet necessary.
 2. IdentityModule<br>
-   In the identity module i implement a functional approach with my custom Result class in PixelDance.Shared.ROP. It simplifies my error handling with RailwayOrientedProgramming. If you question what it is, it's a simple Monad with usefull operations on it and it should eliminate null handling. For further reading on the RailwayOrientedProgramming concept, see [Scott Wlaschin](https://fsharpforfunandprofit.com/rop/)
+   In the identity module i implement a functional approach with my custom Result class in BitShifter.Shared.ROP. It simplifies my error handling with RailwayOrientedProgramming. If you question what it is, it's a simple Monad with usefull operations on it and it should eliminate null handling. For further reading on the RailwayOrientedProgramming concept, see [Scott Wlaschin](https://fsharpforfunandprofit.com/rop/)
 
 ## General
 
@@ -23,13 +23,13 @@ To "DRY" my query logic and push it down to the domain layer, i use a pretty awe
 ## Folder and Module structure
 
 ```
-PixelDance.RecipeApp/
+BitShifter.RecipeApp/
 |
 |– Bootstrapper/
 |   |- WebApi
 |
 |– Frontend/
-|   |– pixeldance-materialize // Angular frontend application
+|   |– bitshifter-materialize // Angular frontend application
 |
 |- Modules
 |   |- Identity
@@ -46,7 +46,7 @@ PixelDance.RecipeApp/
 
 To reach a real-worl scenario messaging infrastructure would be required to decouple my recipe and category "AggregateRoot", but for the time being, it's nothing more then a violation from KISS principle.
 
-My first thoughts would be either a Reactive approach with a self-made MessageBus that can be found on my Github profile [PixelDance.ReactiveBus](https://github.com/MarkusGnigler/PixelDance.ReactiveBus) or use IMHO a overkill solution like RabbitMq or somthing similar.
+My first thoughts would be either a Reactive approach with a self-made MessageBus that can be found on my Github profile [BitShifter.ReactiveBus](https://github.com/MarkusGnigler/BitShifter.ReactiveBus) or use IMHO a overkill solution like RabbitMq or somthing similar.
 
 ## A short breav about my used technologies and libraries
 
