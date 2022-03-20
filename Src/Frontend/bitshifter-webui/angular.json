@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "projects": {
+    "core-lib": "libs/core-lib",
+    "identity-lib": "libs/identity-lib",
+    "recipe-app": "apps/recipe-app",
+    "recipe-app-e2e": "apps/recipe-app-e2e",
+    "recipe-lib": "libs/recipe-lib",
+    "ui-lib": "libs/ui-lib"
+  }
+}

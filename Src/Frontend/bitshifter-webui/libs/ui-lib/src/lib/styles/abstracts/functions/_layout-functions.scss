@@ -1,0 +1,11 @@
+
+
+@mixin side_grid($side-width) {
+    @if unit($side-width) == 'px' {
+    // @if type-of($side-width) == number {
+        display: grid;
+        grid-template-columns: minmax($side-width, 25%) 1fr;
+    } @else {
+        @warn "Make sure that `$side-width` is pixel.";
+    }
+}

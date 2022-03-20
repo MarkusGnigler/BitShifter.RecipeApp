@@ -1,0 +1,122 @@
+$sidenavPadding: 31px;
+
+.admin-panel-container {
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: absolute !important;
+
+	mat-sidenav {
+		//Right border
+		.mat-drawer-side {
+			border-right: 0px;
+		}
+
+		//Sidenav footer layout
+		.sidenav-flex {
+			height: 100%;
+		}
+
+		//Sidenav disabled item
+		.mat-list-item-disabled {
+			color: #cecece91 !important;
+			background-color: transparent;
+		}
+
+		//Sidenav active item
+		mat-nav-list .activeLink::before {
+			content: '';
+			width: 0.25rem;
+			height: 100%;
+			position: absolute;
+			right: 0;
+			background-color: map-get($secondary, 500);
+			transition: 500ms cubic-bezier(0.35, 0, 0.25, 1);
+		}
+
+		//Sidenav header
+		.sidenav-header {
+			padding-left: $sidenavPadding;
+		}
+
+		//Sidenav left space
+		.mat-list-item .mat-list-item-content {
+			padding-left: $sidenavPadding !important;
+			padding-right: $sidenavPadding !important;
+			justify-content: center;
+		}
+
+		//Sidenav icons
+		.mat-list-base {
+			padding-top: 0;
+
+			.mat-list-item,
+			.mat-list-option {
+				height: 4rem !important;
+				font-size: 1rem;
+			}
+		}
+
+		// Sidenav footer
+		.sidenav-footer {
+			.inner-footer {
+				width: 100%;
+				min-height: 64px;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				background-color: map-get($primary, 500);
+			}
+
+			.sidenav-footer-content {
+				padding-top: 10px;
+			}
+
+			mat-icon {
+				// color: map-get($primary, 500);
+			}
+		}
+	}
+
+	// Sidenav main
+	mat-sidenav-content {
+		main {
+			overflow: auto; // Sets the Sidenav to full height
+			height: 100%;
+		}
+	}
+
+	//Sidenav only with icons
+	.is-expanded {
+		width: $sidebarExpandedWidth;
+
+		mat-toolbar h1 {
+			display: none;
+		}
+		mat-button-toggle-group {
+			display: none;
+		}
+	}
+	mat-sidenav-content.is-side-expanded {
+		margin-left: $sidebarExpandedWidth !important;
+	}
+}
+
+//Light backrgound
+.admin-panel-container.light-theme {
+	mat-drawer {
+		background-color: #d1d1d166 !important;
+	}
+
+	//Sidenav disabled item
+	.mat-list-item-disabled {
+		color: #93939391 !important;
+		background-color: transparent !important;
+	}
+
+	mat-sidenav-content {
+		main {
+			background-color: white !important;
+		}
+	}
+}

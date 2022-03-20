@@ -1,0 +1,50 @@
+<mat-card style="margin-bottom: 25px;">
+	<bs-category-creator (createCategory)="onCreateCategory($event)"></bs-category-creator>
+</mat-card>
+<mat-card>
+	<ng-container *ngIf="categories$ | async as categories; else elseTemplate">
+		<!-- Name -->
+		<ng-template #nameTemplate let-category let-id="index">
+			<ng-container *ngIf="!category.isEditable; else elseTemplate">
+				{{ category.name }}
+			</ng-container>
+			<ng-template #elseTemplate>
+				<mat-form-field>
+					<input matInput [(ngModel)]="categoryToUpdate" />
+				</mat-form-field>
+			</ng-template>
+		</ng-template>
+
+		<!-- Actions -->
+		<ng-template #actionTemplate let-category let-id="index">
+			<ng-container *ngIf="category.isEditable; else elseTemplate">
+				<button mat-icon-button color="primary" (click)="onUpdateCategory(category)">
+					<mat-icon>save</mat-icon>
+				</button>
+				<button mat-icon-button color="warn" (click)="onCancelCategoryEditable(category)">
+					<mat-icon>cancel</mat-icon>
+				</button>
+			</ng-container>
+			<ng-template #elseTemplate>
+				<button mat-icon-button color="primary" (click)="onSetCategoryEditable(category)">
+					<mat-icon>edit</mat-icon>
+				</button>
+			</ng-template>
+
+			<button mat-icon-button color="warn" (click)="onDeleteCategory(category)">
+				<mat-icon>delete</mat-icon>
+			</button>
+		</ng-template>
+
+		<ui-core-table
+			[items]="categories"
+			[beforeTemplates]="[
+				{ header: 'Name', template: nameTemplate },
+				{ header: 'Aktion', template: actionTemplate }
+			]"
+		></ui-core-table>
+	</ng-container>
+	<ng-template #elseTemplate>
+		<p>Not found!!</p>
+	</ng-template>
+</mat-card>

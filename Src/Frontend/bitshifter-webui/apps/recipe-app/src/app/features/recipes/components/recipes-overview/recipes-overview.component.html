@@ -1,0 +1,23 @@
+<ng-container *ngIf="recipes$ | async as recipes; else elseTemplate">
+	<ng-container *ngIf="recipes.length > 0; else elseTemplate">
+		<bs-recipe-header></bs-recipe-header>
+
+		<section fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="space-evenly center" fxLayoutGap="45px grid">
+			<ng-container *ngFor="let recipe of recipes">
+				<bs-recipe-card
+					[recipe]="recipe"
+					(updateRecipe)="onUpdateRecipe($event)"
+					(editRecipe)="onEditRecipe($event)"
+					(showRecipe)="onShowRecipe($event)"
+				></bs-recipe-card>
+			</ng-container>
+		</section>
+	</ng-container>
+</ng-container>
+<ng-template #elseTemplate>
+	<section fxLayout="row wrap" fxLayout.xs="column" fxLayoutAlign="space-evenly center" fxLayoutGap="45px grid">
+		<ui-not-found text="Keine Rezepte vorhanden."></ui-not-found>
+	</section>
+</ng-template>
+
+<ui-icon-button [routerLink]="['/rezepte/r/creator']"></ui-icon-button>

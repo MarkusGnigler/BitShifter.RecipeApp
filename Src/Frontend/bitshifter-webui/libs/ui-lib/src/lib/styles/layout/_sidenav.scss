@@ -1,0 +1,9 @@
+.sidenav-container {
+	height: 100%;
+	overflow: auto !important;
+
+	mat-sidenav-content {
+		overflow: auto !important;
+		height: 100%;
+	}
+}

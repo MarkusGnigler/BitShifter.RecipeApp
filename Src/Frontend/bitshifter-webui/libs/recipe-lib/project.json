@@ -1,0 +1,26 @@
+{
+  "projectType": "library",
+  "root": "libs/recipe-lib",
+  "sourceRoot": "libs/recipe-lib/src",
+  "prefix": "bs",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/recipe-lib"],
+      "options": {
+        "jestConfig": "libs/recipe-lib/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/recipe-lib/src/**/*.ts",
+          "libs/recipe-lib/src/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

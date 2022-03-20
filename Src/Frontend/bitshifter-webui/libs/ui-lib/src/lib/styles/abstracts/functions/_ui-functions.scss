@@ -1,0 +1,17 @@
+@mixin underscore_title($color, $height: 2px) {
+	border-bottom: $height solid $color;
+}
+
+@mixin set-icon-size($size) {
+	height: $size;
+	width: $size;
+	font-size: $size;
+}
+
+@mixin loading($opacity: 0.5) {
+    opacity: $opacity;
+    pointer-events: none;
+}
+.is-loading {
+	@include loading();
+}

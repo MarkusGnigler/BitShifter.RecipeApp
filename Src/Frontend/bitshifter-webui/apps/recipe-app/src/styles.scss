@@ -1,0 +1,12 @@
+
+@import 'apps/recipe-app/src/app/styles/main';
+@import 'libs/ui-lib/src/lib/styles/index';
+
+
+// TODO: movde to identity library
+.login-card .mat-card-header-text {
+	color: map-get($primary, 400);
+	margin-top: 12px;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}

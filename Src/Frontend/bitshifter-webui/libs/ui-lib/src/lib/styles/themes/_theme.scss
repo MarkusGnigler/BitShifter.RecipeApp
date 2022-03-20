@@ -1,0 +1,9 @@
+@import '~@angular/material/theming';
+@import './dark-theme';
+@import './light-theme';
+
+@include angular-material-theme($dark-theme);
+
+.light-theme > * {
+	@include angular-material-theme($light-theme);
+}
