@@ -1,0 +1,28 @@
+FROM node:16-alpine AS build
+
+WORKDIR /usr/app
+
+COPY Src/Frontend/bitshifter-webui/package*.json ./
+COPY Src/Frontend/bitshifter-webui/decorate-angular-cli.js .
+
+RUN npm install -g npm@8.5.5
+RUN npm install
+
+COPY Src/Frontend/bitshifter-webui .
+
+RUN yarn nx run-many --target=lint --all
+# RUN yarn nx run-many --target=test --all
+
+# RUN yarn nx run-many --target=build --all
+
+ARG APP_NAME
+
+RUN yarn nx build $APP_NAME
+
+FROM nginx:alpine
+
+WORKDIR /var/www
+
+ARG APP_NAME
+
+COPY --from=build /usr/app/dist/apps/$APP_NAME .
