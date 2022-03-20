@@ -1,8 +1,0 @@
-//
-// Define a dark theme
-$primary: $dark-primary;
-$dark-theme-primary: mat-palette($primary);
-$dark-theme-accent: mat-palette($secondary, A200, A100, A400);
-
-// Apply the dark theme by default
-$dark-theme: mat-dark-theme($dark-theme-primary, $dark-theme-accent);
